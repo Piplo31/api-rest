@@ -33,23 +33,25 @@ router.get('/consultatotalpacientes', async (req, res) => {
   res.json(rows);
 });
 
-router.post('/borrarpacientes', async (req, res) => {
-  const { numid } = req.body;
-  await pool.query(
-    `DELETE FROM public.pacientes WHERE numid='${numid}'`
-    
-  );
-  res.send(`PACIENTE '${numid}' ELIMINADO`);
+router.get('/consultar-paciente/:id', async (req, res) => {
+    const id  = req.params.id;
+    const { rows }  = await pool.query(`SELECT * FROM pacientes WHERE id = ${id}`);
+    //console.log(rows);
+    res.json(rows);
+}); 
+
+router.delete('/eliminar-paciente/:id', async (req, res) => {
+    const id  = req.params.id;
+    await pool.query(`DELETE FROM pacientes WHERE id=${id}`);
+    res.json({'mensaje': 'Paciente Eliminado'});
 });
 
-
-router.post('/actualizarpacientes',async(req, res)=>
-{
-  const { nombre, apellido, numid } = req.body;
-  await pool.query(
-    
-    `UPDATE public.pacientes SET nombre='${nombre}', apellido='${apellido}' WHERE numid='${numid}'`
-  );
-  res.send(`PACIENTE '${numid}' ACTUALIZADO`);
-}
-);
+router.post('/actualizar-paciente', async (req, res) => {
+    const { id, nombre, apellido, numid } = req.body;
+    //console.log(req.body)
+    await pool.query(
+      `UPDATE pacientes SET nombre = '${nombre}', apellido = '${apellido}', numid = '${numid}' WHERE id = ${id}`
+    );
+    res.json({ 'mensaje': 'Paciente Actualizado' });
+});
+  
