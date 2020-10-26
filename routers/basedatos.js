@@ -29,7 +29,7 @@ router.post('/insertarpaciente', async (req, res) => {
 
 router.get('/consultatotalpacientes', async (req, res) => {
 
-  const { rows } = await pool.query('SELECT * FROM pacientes');
+  const { rows } = await pool.query('SELECT * FROM pacientes ORDER BY id DESC');
   res.json(rows);
 });
 
